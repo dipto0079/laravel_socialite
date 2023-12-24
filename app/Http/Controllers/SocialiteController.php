@@ -9,16 +9,17 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
-    public function login()
+    public function login($provider)
     {
-        return Socialite::driver('github')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
-    public function redirect()
+    public function redirect($provider)
     {
-        $gitUser = Socialite::driver('github')->user();
+        $gitUser = Socialite::driver($provider)->user();
 
         $user = User::updateOrCreate([
+            'provider' => $provider,
             'provider_id' => $gitUser->getId(),
         ], [
             'name' => $gitUser->getName(),
@@ -29,25 +30,47 @@ class SocialiteController extends Controller
 
         return to_route('dashboard');
     }
-    
-    public function dribbbleLogin()
-    {
-        return Socialite::driver('dribbble')->redirect();
-    }
 
-    public function dribbbleLRedirect()
-    {
-        $gitUser = Socialite::driver('dribbble')->user();
+//    public function login()
+//    {
+//        return Socialite::driver('github)->redirect();
+//    }
+//
+//    public function redirect()
+//    {
+//        $gitUser = Socialite::driver('github)->user();
+//
+//        $user = User::updateOrCreate([
+//            'provider_id' => $gitUser->getId(),
+//        ], [
+//            'name' => $gitUser->getName(),
+//            'email' => $gitUser->getEmail(),
+//        ]);
+//
+//        Auth::login($user, true);
+//
+//        return to_route('dashboard');
+//    }
 
-        $user = User::updateOrCreate([
-            'dribbble_id' => $gitUser->getId(),
-        ], [
-            'name' => $gitUser->getName(),
-            'email' => $gitUser->getEmail(),
-        ]);
 
-        Auth::login($user, true);
-
-        return to_route('dashboard');
-    }
+//    public function dribbbleLogin()
+//    {
+//        return Socialite::driver('dribbble')->redirect();
+//    }
+//
+//    public function dribbbleLRedirect()
+//    {
+//        $gitUser = Socialite::driver('dribbble')->user();
+//
+//        $user = User::updateOrCreate([
+//            'dribbble_id' => $gitUser->getId(),
+//        ], [
+//            'name' => $gitUser->getName(),
+//            'email' => $gitUser->getEmail(),
+//        ]);
+//
+//        Auth::login($user, true);
+//
+//        return to_route('dashboard');
+//    }
 }
