@@ -29,6 +29,7 @@ class SocialiteController extends Controller
 
         return to_route('dashboard');
     }
+    
     public function dribbbleLogin()
     {
         return Socialite::driver('dribbble')->redirect();
